@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "Авторизация";
+}
+@using (Html.BeginForm("Authorization", "Home", FormMethod.Post,new { @class= "form-signin text-center" }))
+{
+    <img class="mb-4" src="https://userscontent2.emaze.com/images/fd3eb14f-51f4-469e-9cc9-060dc2f8eb38/5ede7d415a283e0826bef7abf97a6e51.jpg" alt="" width="72" height="72">
+    <h1 class="h3 mb-3 font-weight-normal">Пожалуйста, авторизируйтесь</h1>
+    <label for="inputLogin" class="sr-only">Email address</label>
+    <input type="text" id="inputLogin" name="login" class="form-control" placeholder="Логин" required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Пароль" required>
+    <br/>
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <input type="submit" class="btn btn-primary" value="Войти">
+            @Html.ActionLink("Регистрация", "Registration", null, new { @class= "btn btn-outline-info" })
+        </div>
+    </div>
+}

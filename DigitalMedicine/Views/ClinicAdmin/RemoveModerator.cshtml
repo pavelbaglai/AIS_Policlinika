@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DigitalMedicine.Models.Users.OtherWorker>
+@using DigitalMedicine.Models.Users;
+
+@{
+    ViewBag.Title = "Удаление модератора";
+}
+
+<h2>Удаление модератора</h2>
+<br />
+@using (Html.BeginForm("RemoveModerator", "ClinicAdmin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label class="control-label col-md-2">Модератор</label>
+        <div class="col-md-10">
+            <select id="idModerator" name="idModerator" class="form-control">
+                @foreach (OtherWorker moderator in Model)
+                {
+                    <option value="@moderator.Id">@moderator.GetFio(true)</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group col-md-6">
+            <input type="submit" value="Удалить" class="btn btn-outline-primary" />
+            <a class="btn btn-outline-danger" href="@Url.Action("Index","Cabinet")">В кабинет</a>
+        </div>
+    </div>
+}

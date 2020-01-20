@@ -1,0 +1,30 @@
+﻿<div class="modal fade" id="addDiagnosis" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление нового диагноза</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("AddDiagnosis", "Doctor", FormMethod.Post))
+                {
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            @Html.Label("Введите название диагноза: ", htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                <input class="form-control" type="text" id="Name" name="Name" required />
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                            <button type="submit" class="btn btn-primary">Добавить дигноз</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

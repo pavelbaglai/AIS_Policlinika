@@ -1,0 +1,200 @@
+﻿@model DigitalMedicine.Models.Institution.Clinic
+@using DigitalMedicine.Models
+@using DigitalMedicine.Models.Users
+
+@{
+    ViewBag.Title = Model.Name;
+    DataBaseContext context = null;
+    OtherWorker moderator = null;
+    if (Session["currentUser"] != null)
+    {
+        int id = ((User)Session["currentUser"]).Id;
+        if (id != 0)
+        {
+            context = new DataBaseContext();
+            moderator = context.OtherWorkers.Where(ow=>ow.Id==id).SingleOrDefault();
+        }
+    }
+}
+
+
+<div class="nav nav-tabs" id="clinicMenuTabs" role="tablist">
+    <a class="nav-item nav-link active" id="menuMainTab" data-toggle="tab" href="#menuMain" role="tab" aria-controls="menuMain" aria-selected="true">Главная</a>
+    <a class="nav-item nav-link" id="menuNewsTab" data-toggle="tab" href="#menuNews" role="tab" aria-controls="menuNews" aria-selected="false">Новости</a>
+    <a class="nav-item nav-link" id="menuDoctorsTab" data-toggle="tab" href="#menuDoctors" role="tab" aria-controls="menuDoctors" aria-selected="false">Врачи</a>
+    <a class="nav-item nav-link" id="menuContactsTab" data-toggle="tab" href="#menuContacts" role="tab" aria-controls="menuContacts" aria-selected="false">Контакты</a>
+</div>
+
+<div class="tab-content" id="clinicMenuContent">
+    <div class="tab-pane fade show active" id="menuMain" role="tabpanel" aria-labelledby="nav-home-tab">
+        <br />
+        <h2>@Model.Name</h2>
+        <div class="col-6">
+            @if (Model.Photo == null)
+            {
+                <img class="img-fluid" src="~/Photos/ClinicDraw.png" />
+            }
+            else
+            {
+                @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(Model.Photo)}\" />")
+            }
+        </div>
+        <br />
+        <h2>Иcтория нашей больницы: </h2>
+        @if (Model.About == null)
+        {
+            <span>Информация отсутствует</span>
+        }
+        else
+        {
+            @Html.Raw(Model.About.Replace("\r\n", "<br/>"))
+        }
+        @if (moderator != null && moderator.IdInstitution == Model.Id)
+        {
+            <br />
+            <input type="button" id="editInfo" class="btn btn-outline-primary" value="Изменить информацию" />
+            using (Html.BeginForm("EditClinicInfo", "Moderator", FormMethod.Post, new { id = "editForm", style = "display:none" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal">
+                    <hr />
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    @Html.HiddenFor(model => model.Id)
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.About, htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.EditorFor(model => model.About, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.About, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-10">
+                            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label" })
+                            <div>
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <input type="submit" value="Изменить информацию" class="btn btn-outline-success" />
+                        <input type="button" id="close" value="Скрыть форму" class="btn btn-outline-primary" />
+                    </div>
+                </div>
+            }
+        }
+    </div>
+    <div class="tab-pane fade" id="menuNews" role="tabpanel" aria-labelledby="nav-news-tab">
+        <br />
+        @foreach (var news in Model.News.OrderByDescending(n => n.Date))
+        {
+            <div id="news@(news.Id)" class="row">
+                <div class="col-3">
+                    @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(news.Photo)}\" />")
+                </div>
+                <div class="col-8">
+                    <p class="newsDate badge badge-warning">@news.Date.ToString("g")</p><br />
+                    <a href="@Url.Action("News","Home", routeValues: new { id = $"{news.Id}" })" class="newsTitle h3">@news.Title</a>
+                    <p class="miniNews h5">@news.MiniNews</p>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+    <div class="tab-pane fade" id="menuDoctors" role="tabpanel" aria-labelledby="nav-contact-tab">
+        <br />
+        @foreach (var doctor in Model.Doctors)
+        {
+            <div id="doctor@(doctor.Id)" class="row">
+                <div class="col-4 text-center">
+                    @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(doctor.Photo)}\" />")
+                </div>
+                <div class="col-md-8" style="font-size:28px">
+                    <a class="h2" href="@Url.Action("Doctor","Home",routeValues:new { id=$"{doctor.Id}"})">
+                        @Html.DisplayFor(modelItem => doctor.Surname)
+                        @Html.DisplayFor(modelItem => doctor.Name)
+                        @Html.DisplayFor(modelItem => doctor.Patronymic)
+                    </a>
+                    <p class="h5">
+                        @foreach (var speciality in doctor.Specialities)
+                        {
+                            <span style="cursor:pointer" class="badge badge-primary" data-toggle="tooltip" data-placement="bottom" title="@speciality.Information">@speciality.Name</span>
+                        }
+                    </p>
+                    <p class="h5">E-mail: @Html.DisplayFor(modelItem => doctor.Email)</p>
+                    <p class="h5">@doctor.Information.Substring(0, 40)...</p>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+    <div class="tab-pane fade" id="menuContacts" role="tabpanel" aria-labelledby="nav-news-tab">
+        <br />
+        <h3>Наши координаты: </h3>
+        <br />
+        <div id="map" style="height: 400px; width: 100%;"></div>
+        <div id="info">
+            @Model.Name<br />
+            <b>Адрес: </b>@Model.Address<br />
+            <b>Телефон: </b>@Model.Phone
+        </div>
+    </div>
+</div>
+<script>
+    var infowindow;
+
+    function initMap() {
+        var clinic = { lat: @Model.Latitude, lng: @Model.Longitude}
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 16,
+            center: clinic
+        });
+        var marker = new google.maps.Marker({
+            position: clinic,
+            map: map
+        });
+
+        infowindow = new google.maps.InfoWindow({
+            content: document.getElementById('info')
+        });
+
+        google.maps.event.addListener(marker, 'click', function () {
+            infowindow.open(map, marker);
+        });
+
+        infowindow.open(map, marker);
+    }
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkC1rWsEJwiRdlBZwk1icwMgv1FV7vDTc&callback=initMap">
+</script>
+
+<script type="text/javascript">
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+
+    $("#editInfo").click(function () {
+        $("#editForm").show("quick");
+    });
+    $("#close").click(function () {
+        $("#editForm").hide("quick");
+    });
+</script>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

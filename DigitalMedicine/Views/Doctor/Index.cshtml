@@ -1,0 +1,43 @@
+﻿@Html.ActionLink("Просмотр электронной очереди", "ShowAppointments", "Doctor", null, new { @class = " btn btn-primary" })
+<br /><br />
+@Html.ActionLink("Просмотр отчетности по пациентам", "GetSelfReports", "Doctor", null, new { @class = " btn btn-primary" })
+<br /><br />
+@Html.ActionLink("Просмотр отчетности по лаб", "AnalysesAppointments", "Patient", null, new { @class = " btn btn-primary" })
+<br /><br />
+
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeReceptionTime">
+    Изменить время приёма пациента
+</button><br /><br />
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeRotationTime">
+    Изменить время чередования пациентов из живой и электронной очередей
+</button>
+<div class="modal fade" id="changeReceptionTime" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Изменение времени приёма</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("~\\Views\\Doctor\\ChangeReceptionTime.cshtml", null)
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="changeRotationTime" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Изменение времени чередования</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @Html.Partial("~\\Views\\Doctor\\ChangeRotationTime.cshtml", null)
+            </div>
+        </div>
+    </div>
+</div>

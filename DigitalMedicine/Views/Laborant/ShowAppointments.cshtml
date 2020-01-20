@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DigitalMedicine.Models.LaboratoryAppointment>
+@{
+    ViewBag.Title = "Просмотр записей пацентов";
+}
+<h2>Просмотр записей пацентов</h2>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LaboratoryAnalysis.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Patient.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Day)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("ShowAppointment","Laborant",new { id=item.Id})">@item.LaboratoryAnalysis.Name</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+        }
+        </tr>
+    }
+</table>
+       

@@ -1,0 +1,19 @@
+﻿@using DigitalMedicine.Models.Users;
+
+@using (Html.BeginForm("ChangeRotationTime", "Doctor", FormMethod.Post))
+{
+    <div class="form-horizontal">
+        @Html.Hidden("id", ((User)Session["currentUser"]).Id)
+        <div class="form-group">
+            @Html.Label("Новое время(в минутах): ", htmlAttributes: new { @class = "control-label col-md-12" })
+            <div class="col-md-12">
+                @Html.TextBox("rotationTime", "", new { @class = "form-control", required = "required" })
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </div>
+    </div>
+}

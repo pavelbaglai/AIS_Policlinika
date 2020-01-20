@@ -1,0 +1,109 @@
+﻿@model DigitalMedicine.Models.Users.User
+@using DigitalMedicine.Models
+@using DigitalMedicine.Models.Users
+
+@{
+    ViewBag.Title = "Личный кабинет";
+    Patient patient = null;
+    if (Model.Role.Name == "Пациент")
+         {
+             DataBaseContext con = new DataBaseContext();
+             patient = con.Patients.Find(Model.Id);
+         }
+}
+<h2>Личный кабинет</h2>
+<div class="row">
+        <div class="col-md-8">
+            <h4>@Model.Surname @Model.Name @Model.Patronymic</h4>
+            <h5>@Model.GetBirthday()</h5>
+            <h5>@Model.Email</h5>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changeMail">
+                Изменить e-mail
+            </button>
+            <div class="modal fade" id="changeMail" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Изменение почтового ящика</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @{Html.RenderPartial("ChangeEmail");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePassword">
+                Изменить пароль
+            </button>
+            <div class="modal fade" id="changePassword" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Изменение пароля</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @{Html.RenderPartial("ChangePassword");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#changePhoto">
+                Сменить изображение
+            </button>
+            <div class="modal fade" id="changePhoto" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLongTitle">Изменение фотографии</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            @{Html.RenderPartial("ChangePhoto");}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (patient != null && patient.FamilyDoctor != null)
+            {
+                <br /><br />
+                <b>Семейный врач: </b><a href="@Url.Action("Doctor","Home",new { id=patient.IdFamilyDoctor})">@patient.FamilyDoctor.GetFio(true)</a>
+            }
+        </div>
+    </div>
+<br />
+@if (Model.Role.Name == "Пациент")
+{
+    @Html.Partial("~\\Views\\Patient\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Доктор")
+{
+    @Html.Partial("~\\Views\\Doctor\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Лаборант")
+{
+    @Html.Partial("~\\Views\\Laborant\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Администратор системы")
+{
+    @Html.Partial("~\\Views\\Admin\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Администратор клиники")
+{
+    @Html.Partial("~\\Views\\ClinicAdmin\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Модератор клиники")
+{
+    @Html.Partial("~\\Views\\Moderator\\Index.cshtml", null)
+}
+else if (Model.Role.Name == "Администратор лаборатории")
+{
+    @Html.Partial("~\\Views\\LaboratoryAdmin\\Index.cshtml", null)
+}

@@ -1,0 +1,136 @@
+﻿@model DigitalMedicine.Models.News.ClinicNews
+@using DigitalMedicine.Models.Users
+
+@{
+    /**/
+
+    ViewBag.Title = "Новости";
+}
+
+<h2>@Model.Title</h2>
+
+<div id="news">
+    <div class="col-6">
+        @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(Model.Photo)}\" />")
+    </div>
+    <br />
+    <p class="newsDate badge badge-warning">@Model.Date.ToString("g")</p>
+    <p id="fullNews" style="text-align:justify" class="h5">@Html.Raw(Model.FullNews.Replace("\r\n", "<br/>"))</p>
+</div>
+<a class="btn btn-outline-success" href="@Url.Action("Clinic", "Home", new { id = Model.IdClinic })">Вернуться к больнице</a>
+<br /><br />
+@if (Session["currentUser"] != null && ((DigitalMedicine.Models.Users.User)Session["currentUser"]).Role.Name == "Модератор клиники" && Model.IdClinic == (int)Session["clinic"])
+{
+    <div class="row">
+        <input type="button" id="editNews" class="col-2 btn btn-outline-primary" value="Редактировать" />
+        <a href="@Url.Action("DeleteNews","Moderator",new { idClinic=(int)Session["clinic"], idNews=Model.Id})" class="col-1 btn btn-outline-danger">Удалить</a>
+    </div>
+    using (Html.BeginForm("EditNews", "Moderator", FormMethod.Post, new { id="editForm", style="display:none"}))
+    {
+        @Html.AntiForgeryToken()
+        <div class="form-horizontal">
+            <hr />
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group col-md-10">
+                @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-10">
+                @Html.LabelFor(model => model.MiniNews, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.MiniNews, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MiniNews, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group col-md-10">
+                @Html.LabelFor(model => model.FullNews, htmlAttributes: new { @class = "control-label" })
+                <div>
+                    @Html.EditorFor(model => model.FullNews, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FullNews, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <input type="hidden" id="Id" name="Id" value="@Model.Id" />
+            <input type="hidden" id="IdClinic" name="IdClinic" value="@Model.IdClinic" />
+            <input type="hidden" id="Photo" name="Photo" value="@Model.Photo" />
+
+            <div class="form-group col-md-6">
+                <input type="submit" value="Сохранить" class="btn btn-outline-primary" />
+            </div>
+        </div>
+    }
+}
+<hr />
+<h3>Комментарии</h3>
+
+@if (Session["currentUser"] != null)
+{
+    using (Ajax.BeginForm("AddComment", "Cabinet", null, new AjaxOptions { HttpMethod = "Post" }, new { id = "comment" }))
+    {
+        <input name="IdUser" type="hidden" value="@(((User)Session["currentUser"]).Id)" />
+        <input name="IdNews" type="hidden" value="@Model.Id" />
+
+        <div class="form-group col-5">
+            <label for="comment">Ваш комментарий:</label>
+            <textarea class="form-control" name="Text" id="text" rows="3"></textarea>
+            <span id="errorMsg" class="field-validation-valid text-danger"></span>
+        </div>
+
+        <div class="form-group col-4">
+            <input id="sendBtn" type="submit" value="Отправить" class="btn btn-outline-primary" />
+        </div>
+    }
+}
+<br />
+<div id="comments">
+    @foreach (var comment in Model.Comments.OrderByDescending(c => c.PublicationTime))
+    {
+        <div class="row">
+            <div class="col-2">
+                @Html.Raw($"<img class=\"img-fluid rounded-circle\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(comment.User.Photo)}\" />")
+            </div>
+            <div class="col-6">
+                <p class="newsDate badge badge-warning">@comment.PublicationTime.ToString("g")</p>
+                <p class="font-weight-bold h4">@comment.User.GetFio(true)</p>
+                <p>@Html.Raw(comment.Text.Replace("\r\n", "<br/>"))</p>
+            </div>
+            @if (Session["currentUser"] != null && ((DigitalMedicine.Models.Users.User)Session["currentUser"]).Role.Name == "Модератор клиники" && Model.IdClinic == (int)Session["clinic"])
+            {
+                <div class="col-2 offset-2">
+                    <a href="@Url.Action("DeleteComment","Moderator",new { idNews=Model.Id, idComment=comment.Id})" class="btn btn-outline-danger">Удалить</a>
+                </div>
+            }
+        </div>
+        <hr />
+    }
+</div>
+
+<script>
+    $("#comment").submit(function () {
+        var text = $("#text").val();
+        var errormsg = $("#errorMsg");
+        if (text.length == 0) {
+            errormsg.text("Комментарий не может быть пустым!");
+            return false;
+        }
+        if (text.length > 200) {
+            errormsg.text("Комментарий не может превышать 200 символов!");
+            return false;
+        }
+        $("#comments").prepend("<p class='h3'>Спасибо за ваш комментарий!</p><br/>");
+        return true;
+    });
+
+    $("#editNews").click(function () {
+        var form = $("#editForm");
+        if (form.css("display") == "none")
+            form.show("quick");
+        else
+            form.hide("quick");
+    });
+</script>

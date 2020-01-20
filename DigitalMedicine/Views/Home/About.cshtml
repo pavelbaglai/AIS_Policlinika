@@ -1,0 +1,39 @@
+﻿@{
+    ViewBag.Title = "Charts";
+}
+
+<canvas id="myChart"></canvas>
+<p class="result"></p>
+<select id="x" name="x">
+    <option value="1">1</option>
+    <option value="2">2</option>
+</select>
+
+<script>
+    var chartStr = jQuery.parseJSON("@((string)ViewBag.dataChart)".replace(/&quot;/g, "\""));
+    var ctx = $("#myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        "data": chartStr,
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+    
+    $("#x").change(function () {
+        var option = $(this).find('option:selected').val();
+        $.post("@Url.Action("GetDataForChart", "Home")", { "x": option }, function (data) {
+            chartStr = jQuery.parseJSON(data.replace(/&quot;/g, "\""));
+            myChart.data.datasets = chartStr.datasets;
+            myChart.data.labels = chartStr.labels;
+            myChart.update();
+        });
+
+    });
+</script>

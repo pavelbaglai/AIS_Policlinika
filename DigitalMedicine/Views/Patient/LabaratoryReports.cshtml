@@ -1,0 +1,51 @@
+﻿@model IEnumerable<DigitalMedicine.Models.MedCard.LaboratoryReport>
+
+@{
+    ViewBag.Title = "Отчеты лаборатории";
+}
+
+<h2>Отчеты лаборатории</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            <p>Название анализа</p>
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Date)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Description)
+        </th>
+        <th>
+            <p>Результаты</p>
+        </th>
+    </tr>
+
+    @foreach (var item in Model.OrderByDescending(report => report.Date))
+    {
+        <tr>
+            <td>
+                @if (item.LaboratoryAnalysis != null)
+                {
+                    <a href="@Url.Action("Analysis", "Home", new { id = item.IdLaboratoryAnalysis })">@item.LaboratoryAnalysis.Name</a>
+                }
+                else
+                {
+                    <p>Название отсутствует</p>
+                }
+            </td>
+            <td>
+                <p>@item.Date.ToString("d")</p>
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.Raw($"<a href=\"data:application/zip;base64,{Convert.ToBase64String(item.Files)}\" download>Скачать архив</a>")
+            </td>
+        </tr>
+    }
+
+</table>

@@ -1,0 +1,101 @@
+﻿@using DigitalMedicine.Models;
+@using DigitalMedicine.Models.KnowledgeBase;
+@{
+    ViewBag.Title = "Веса симптомов ";
+}
+
+<h2>Веса симптомов в выбранном диагнозе</h2>
+<div class="form-group col-md-5">
+    <label class="control-label">Выберите желаемый диагноз: </label>
+    <div>
+        <select id="idDiagnosis" class="form-control" name="idDiagnosis">
+            @{
+                DataBaseContext context = new DataBaseContext();
+                foreach (var diagnosis in context.Diagnoses.OrderBy(d => d.Name))
+                {
+                    <option value="@diagnosis.Id">@diagnosis.Name</option>
+                }
+            }
+        </select>
+    </div>
+</div>
+
+<center>
+    <p class="h2">Столбчиковая диаграмма</p>
+    <canvas id="myChartBar" class="col-10"></canvas>
+    <a id="downloadBar" class="btn btn-outline-primary">Загрузить</a>
+    <br /><br />
+    <p class="h2">Круговая диаграмма</p>
+    <canvas id="myChartPie" class="col-8"></canvas>
+    <a id="downloadPie" class="btn btn-outline-primary">Загрузить</a>
+</center>
+
+<script>
+    var chartStr = jQuery.parseJSON("@((string)ViewBag.dataChart)".replace(/&quot;/g, "\""));
+    var ctxBar = $("#myChartBar");
+    var ctxPie = $("#myChartPie");
+
+    var myChartBar = new Chart(ctxBar, {
+        type: 'bar',
+        "data": chartStr,
+        options: {
+            legend: {
+                display: false
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        suggestedMax: 100
+                    }
+                }]
+            }
+        }
+    });
+
+    var myChartPie = new Chart(ctxPie, {
+        type: 'pie',
+        "data": chartStr,
+        options: {
+            legend: {
+                display: true,
+                position:"bottom",
+                labels: {
+                    fontColor: 'rgb(255, 99, 132)'
+                }
+            },
+            responsive: true
+        }
+    });
+
+    $("#idDiagnosis").change(function () {
+        var option = $(this).find('option:selected').val();
+        $.post("@Url.Action("GetSymptomWeightsByDiagnosis", "Admin")", { "idDiagnosis": option }, function (data) {
+            myChartPie.clear();
+            myChartBar.clear();
+            if (data == "null") 
+                return;
+
+            chartStr = jQuery.parseJSON(data.replace(/&quot;/g, "\""));
+            myChartBar.data.datasets = chartStr.datasets;
+            myChartBar.data.labels = chartStr.labels;
+            myChartBar.update();
+            myChartPie.data.datasets = chartStr.datasets;
+            myChartPie.data.labels = chartStr.labels;
+            myChartPie.update();
+        });
+    });
+
+    $("#downloadBar").click(function () {
+        var obj = myChartBar.toBase64Image();
+        this.href = obj;
+        this.download = "SymptomsBar.png";
+    });
+
+    $("#downloadPie").click(function () {
+        var obj = myChartPie.toBase64Image();
+        this.href = obj;
+        this.download = "SymptomsPie.png";
+    });
+</script>

@@ -1,0 +1,29 @@
+﻿@model IEnumerable<DigitalMedicine.Models.Institution.Labaratory>
+@using DigitalMedicine.Models.Institution;
+
+@{
+    ViewBag.Title = "Удаление лаборатории";
+}
+
+<h2>Удаление лаборатории</h2>
+<br />
+@using (Html.BeginForm("RemoveLabaratory", "Admin", FormMethod.Post))
+{
+    <div class="form-group">
+        <label class="control-label col-md-2">Лаборатория</label>
+        <div class="col-md-10">
+            <select id="idLaboratory" name="idLaboratory" class="form-control">
+                @foreach (Labaratory laboratory in Model)
+                {
+                    <option value="@laboratory.Id">@laboratory.Name</option>
+                }
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="form-group col-md-6">
+            <input type="submit" value="Удалить" class="btn btn-outline-primary" />
+            <a class="btn btn-outline-danger" href="@Url.Action("Index","Cabinet")">В кабинет</a>
+        </div>
+    </div>
+}

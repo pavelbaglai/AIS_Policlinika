@@ -1,0 +1,108 @@
+﻿@using DigitalMedicine.Models.Institution
+@{
+    ViewBag.Title = "Карта";
+}
+<h2>@ViewBag.Title</h2>
+
+<div id="map" style="height: 500px; width: 100%;"></div>
+<div id="legend"><h3>Легенда</h3></div>
+
+<script>
+    var infowindow;
+    var clinics = jQuery.parseJSON("@((string)ViewBag.Clinics)".replace(/&quot;/g, "\""));
+    var labaratories = jQuery.parseJSON("@((string)ViewBag.Labaratories)".replace(/&quot;/g, "\""));
+    var pharmacies = jQuery.parseJSON("@((string)ViewBag.Pharmacies)".replace(/&quot;/g, "\""));
+    var clinicMarker;
+    var labaratoryMarker;
+    var pharmacyMarker;
+
+    function initMap() {
+        var infowindow = new google.maps.InfoWindow;
+        var icons = {
+            parking: {
+                name: 'Больницы',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
+            },
+            library: {
+                name: 'Лаборатории',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+            },
+            info: {
+                name: 'Аптеки',
+                icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+            }
+        };
+
+        var odessa = { lat: 59.615425, lng: 56.014275 };
+        var map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: odessa
+        });
+        var i = 0;
+        for (clinic in clinics) {
+            clinicMarker = new google.maps.Marker({
+                position: { lat: clinics[clinic].Latitude, lng: clinics[clinic].Longitude },
+                icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+                map: map
+            });
+
+            google.maps.event.addListener(clinicMarker, 'click', (function (clinicMarker, i) {
+                return function () {
+                    infowindow.setContent("<span class='font-weight-bold'>Больница:</span> <a href='@Url.Action("Clinic", "Home")/" + clinics[i].Id + "' target='_blank'>" + clinics[i].Name + "</a><br /><span class='font-weight-bold'>Адрес: </span>" + clinics[i].Address + "<br /><span class='font-weight-bold'>Телефон: </span>" + clinics[i].Phone);
+                    infowindow.open(map, clinicMarker);
+                }
+            })(clinicMarker, i));
+            i++;
+        }
+
+        i = 0;
+        for (labaratory in labaratories) {
+            labaratoryMarker = new google.maps.Marker({
+                position: { lat: labaratories[labaratory].Latitude, lng: labaratories[labaratory].Longitude },
+                icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+                map: map
+            });
+
+            google.maps.event.addListener(labaratoryMarker, 'click', (function (labaratoryMarker, i) {
+                return function () {
+                    infowindow.setContent("<span class='font-weight-bold'>Лаборатория:</span> <a href='@Url.Action("Laboratory", "Home")/" + labaratories[i].Id + "' target='_blank'>" + labaratories[i].Name + "</a><br /><span class='font-weight-bold'>Адрес: </span>" + labaratories[i].Address + "<br /><span class='font-weight-bold'>Телефон: </span>" + labaratories[i].Phone);
+                    infowindow.open(map, labaratoryMarker);
+                }
+            })(labaratoryMarker, i));
+            i++;
+        }
+
+         i = 0;
+        for (pharmacy in pharmacies) {
+            pharmacyMarker = new google.maps.Marker({
+                position: { lat: pharmacies[pharmacy].Latitude, lng: pharmacies[pharmacy].Longitude },
+                icon: "http://maps.google.com/mapfiles/ms/icons/yellow-dot.png",
+                map: map
+            });
+
+            google.maps.event.addListener(pharmacyMarker, 'click', (function (pharmacyMarker, i) {
+                return function () {
+                    infowindow.setContent("<span class='font-weight-bold'>Аптека:</span> <a href='@Url.Action("Pharmacy", "Home")/" + pharmacies[i].Id + "' target='_blank'>" + pharmacies[i].Name + "</a><br /><span class='font-weight-bold'>Адрес: </span>" + pharmacies[i].Address + "<br /><span class='font-weight-bold'>Телефон: </span>" + pharmacies[i].Phone);
+                    infowindow.open(map, pharmacyMarker);
+                }
+            })(pharmacyMarker, i));
+            i++;
+        }
+
+        var legend = document.getElementById('legend');
+        for (var key in icons) {
+            var type = icons[key];
+            var name = type.name;
+            var icon = type.icon;
+            var div = document.createElement('div');
+            div.innerHTML = '<img src="' + icon + '"> ' + name;
+            legend.appendChild(div);
+        }
+
+        map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(legend);
+    }
+</script>
+
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkC1rWsEJwiRdlBZwk1icwMgv1FV7vDTc&callback=initMap">
+</script>

@@ -1,0 +1,43 @@
+﻿@using DigitalMedicine.Models
+@using DigitalMedicine.Models.KnowledgeBase
+
+<div class="modal fade" id="addComplaints" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление жалобы</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select class="form-control" name="idSymptom" id="idСomplaints">
+                    @{
+                        DataBaseContext context = new DataBaseContext();
+                        foreach (var symptomGroup in context.SymptomGroups.OrderBy(d => d.Name))
+                        {
+                            <optgroup label="@symptomGroup.Name">
+                                @foreach (var symptom in symptomGroup.Symptoms.OrderBy(s => s.Name))
+                                {
+                                    <option value="@symptom.Id">@symptom.Name</option>
+                                }
+                            </optgroup>
+                        }
+                    }
+                </select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="addComplaintBtn" class="btn btn-primary">Добавить жалобу</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#addComplaintBtn").click(function () {
+        value = $("#idСomplaints option:selected");
+        $("#complaints").append('<input type="checkbox" name="complaints2" value="' + value.attr("value") + '" checked/>' + value.html()+'<br />');
+    });
+</script>
+

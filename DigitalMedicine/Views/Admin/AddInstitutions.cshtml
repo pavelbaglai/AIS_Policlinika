@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Добавление учреждений";
+}
+
+<h2>Добавление мед.учреждения</h2>
+<hr />
+
+<div id="map" style="background-color: grey;width:100%; height:500px;"></div>
+
+<div id="form">
+    <table>
+        <tr><td>Название учреждения:</td> <td><input type='text' id='name' /> </td> </tr>
+        <tr><td>Адрес:</td> <td><input type='text' id='address' /> </td> </tr>
+        <tr>
+            <td>Тип учреждения:</td>
+            <td>
+                <select id='type'>
+                    +
+                    <option value='clinic' SELECTED>Больница</option>
+                    <option value='laboratory' SELECTED >Лаборатория</option>
+                </select>
+            </td>
+        </tr>
+        <tr><td></td><td><input type='button' value='Save' onclick='saveData()' /></td></tr>
+    </table>
+</div>
+
+<div id="message">Location saved</div>
+<script>
+    var map;
+    var marker;
+    var infowindow;
+    var messagewindow;
+
+    function initMap() {
+        var odessa = { lat: 46.48011, lng: 30.73536 };
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: odessa,
+            zoom: 14
+        });
+
+        infowindow = new google.maps.InfoWindow({
+            content: document.getElementById('form')
+        });
+
+        messagewindow = new google.maps.InfoWindow({
+            content: document.getElementById('message')
+        });
+
+        google.maps.event.addListener(map, 'click', function (event) {
+            if (marker != null) return;
+            marker = new google.maps.Marker({
+                position: event.latLng,
+                draggable: true,
+                map: map
+            });
+
+            google.maps.event.addListener(marker, 'click', function () {
+                infowindow.open(map, marker);
+            });
+        });
+    }
+
+    function saveData() {
+        var name = $("#name").val();
+        var address = $("#address").val();
+        var type = $("#type").val();
+        var latlng = marker.getPosition();
+
+        $.post("@Url.Action("AddInstitution", "Admin")", { "Name": name, "Address": address, "Latitude": latlng.lat(), "Longitude": latlng.lng(), "type": type }, function (data) {
+            if (data =="OKey!") {
+                infowindow.close();
+                messagewindow.open(map, marker);
+            }
+        });
+    }
+</script>
+<script async defer
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkC1rWsEJwiRdlBZwk1icwMgv1FV7vDTc&callback=initMap">
+</script>

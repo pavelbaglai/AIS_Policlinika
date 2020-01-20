@@ -1,0 +1,167 @@
+﻿@model DigitalMedicine.Models.Users.User
+@using DigitalMedicine.Models;
+@using DigitalMedicine.Models.KnowledgeBase;
+
+@{
+    ViewBag.Title = "Просмотр анкеты пациента";
+}
+
+<h2>Просмотр анкеты пациента</h2>
+<hr />
+<div class="row">
+    <div class="col-3">
+        @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(Model.Photo)}\" />")
+    </div>
+
+    <div class="col-md-6">
+        <h4>@Model.Surname @Model.Name @Model.Patronymic</h4>
+        <h5>@Model.GetBirthday()</h5>
+        <h5>@Model.Email</h5>
+    </div>
+</div>
+
+<div>
+    <hr />
+    <p class="h4">Жалобы на момент записи:</p>
+    <ul>
+        @foreach (var symptom in ((List<Symptom>)ViewBag.symptoms).OrderBy(s => s.ToString()))
+        {
+            <li>@symptom.Name</li>
+        }
+    </ul>
+
+    <p class="h4">Вероятные диагнозы:</p>
+    <canvas id="myChartBar" class="col-8"></canvas>
+    @*<p style="margin-left:30px">@Html.Raw(((Appointment)ViewBag.Appointment).PredictedDiagnoses.Replace("\n", "<br/>"))</p>*@
+    <br />
+
+    @using (Html.BeginForm("AddReport", "Doctor", FormMethod.Post))
+    {
+        <div class="row">
+            <div class="col-md-3">
+                <p class="h4">Жалобы на момент приема:</p>
+                <div id="complaints">
+                    @foreach (var symptom in ((List<Symptom>)ViewBag.symptoms).OrderBy(s => s.ToString()))
+                    {
+                        <input type="checkbox" name="complaints2" value="@symptom.Id" checked />@symptom.Name @:<br />
+                    }
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addComplaints">
+                    Добавить жалобу
+                </button>
+            </div>
+            <div class="col-md-3">
+                <p class="h4">Симптомы:</p>
+                <div id="symptoms">
+                    @foreach (var symptom in ((List<Symptom>)ViewBag.symptoms).OrderBy(s => s.ToString()))
+                    {
+                        <input type="checkbox" name="symptoms" value="@symptom.Id" checked />@symptom.Name @:<br />
+                    }
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSymptom">
+                    Добавить симптом
+                </button>
+            </div>
+            <div class="col-md-6">
+                <label for="Temperature">Температура:</label>
+                <input type="text" name="Temperature" />
+                <br><br>
+                <label>Давление:</label>
+                <input type="text" name="Pressure" />
+            </div>
+            <div class="col-md-3">
+                <br>
+                <p class="h4">Рекомендованные анализы:</p>
+                <div id="analyses">
+                </div>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addAnalysis">
+                    Добавить анализ
+                </button>
+            </div>
+        </div>
+        <br /> <br />
+        foreach (var symptom in ((List<Symptom>)ViewBag.symptoms).OrderBy(s => s.ToString()))
+        {
+            <input type="hidden" name="complaints" value="@symptom.Id" />
+        }
+        <input type="hidden" name="IdAppointment" value="@(((Appointment)ViewBag.Appointment).Id)">
+        <input type="hidden" name="IdSymptoms" value="@(((Appointment)ViewBag.Appointment).IdSymptoms)" />
+        <input type="hidden" name="DoctorId" value="@(((DigitalMedicine.Models.Users.User)Session["currentUser"]).Id)" />
+        <input type="hidden" name="PatientId" value="@(Model.Id)" />
+
+        <p class="h4">Заключение врача:</p>
+        <textarea id="Description" name="Description" class="form-control col-6" rows="4"></textarea>
+        <br/>
+        <p class="h4">Конечный диагноз:</p>
+        <div class="row">
+            <select id="DiagnosisId" name="DiagnosisId" class="form-control col-4">
+                @{
+                    DataBaseContext con = new DataBaseContext();
+                    foreach (var item in con.Diagnoses.OrderBy(d => d.Name))
+                    {
+                        <option value="@item.Id">@item.Name</option>
+                    }
+                }
+            </select>
+            &nbsp;&nbsp;
+            <button type="button" class="btn btn-primary col-3" data-toggle="modal" data-target="#addDiagnosis">
+                Добавить новый диагноз
+            </button>
+        </div>
+
+        <br />
+        <p class="h4">Назначение врача:</p>
+        <textarea id="Appointment" name="Appointment" class="form-control col-6" rows="4"></textarea>
+        <br />
+        <p class="h4">Рекомендации:</p>
+        <textarea id="Recommendation" name="Recommendation" class="form-control col-6" rows="4"></textarea>
+        <br />
+        <a class="btn btn-outline-success" href="@Url.Action("GetPatientReports",new { idPatient=Model.Id})" target="_blank">Просмотр мед.карты</a>
+        <input class="btn btn-primary" type="submit" value="Подтвердить диагноз" />
+    }
+</div>
+@{Html.RenderPartial("AddDiagnosis");}
+@{Html.RenderPartial("AddSymptom");}
+@{Html.RenderPartial("AddComplaints");}
+@{Html.RenderPartial("AddAnalysis");}
+<script type="text/javascript">
+    var arr, chartStr = { labels: [], datasets: [{ label:"", data: [], backgroundColor:[], borderColor:[], borderWidth:1}]};
+    $(document).ready(function () {
+        var str = "@Html.Raw(((Appointment)ViewBag.Appointment).PredictedDiagnoses.Replace("\n", "<br/>"))";
+        arr = str.split(/ - |%<br\/>/);
+        chartStr.datasets[0].borderWidth = 1;
+        for (i = 0,j=0; i < arr.length-1; i += 2,j++)
+        {
+            var color1 = Math.round(Math.random() * 255);
+            var color2 = Math.round(Math.random() * 255);
+            var color3 = Math.round(Math.random() * 255);
+            chartStr.labels[j] = arr[i];
+            chartStr.datasets[0].data[j] = arr[i + 1];
+            chartStr.datasets[0].backgroundColor[j] = "rgba(" + color1+","+color2+","+color3+",0.6)";
+            chartStr.datasets[0].borderColor[j] = "rgba(145,243,125,1)";
+        }
+        myChartBar.update();
+    });
+
+    var ctx = $("#myChartBar");
+
+    var myChartBar = new Chart(ctx, {
+        type: 'bar',
+        "data": chartStr,
+        options: {
+            legend: {
+                display: false
+            },
+            responsive: true,
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        suggestedMax: 100
+                    }
+                }]
+            }
+        }
+    });
+
+</script>

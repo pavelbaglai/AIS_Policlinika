@@ -1,0 +1,23 @@
+﻿@model List<TimeSpan>
+
+<br />
+<p class="h4">Укажите желаемое время:</p>
+
+@if (Model == null)
+{
+    <p class="h4">Запись невозможна!</p>
+}
+else
+{
+    @: <div class="row">
+        int id = 1;
+        foreach (TimeSpan time in Model)
+        {
+            <div class="col-2">
+                @Html.RadioButton("StartTime", time.ToString(), false, new { id = "time" + @id, @required = "required" })
+                <label for="time@(id++)">@time.ToString("hh\\:mm")</label>
+            </div>
+        }
+        @:</div>
+    <input class="btn btn-outline-success" type="submit" value="Подтвердить" />
+}

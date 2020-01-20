@@ -1,0 +1,22 @@
+﻿@model IEnumerable<DigitalMedicine.Models.MedCard.DoctorReport>
+
+@{
+
+    ViewBag.Title = "Отчеты врачей";
+}
+
+<h2>Отчеты врачей</h2>
+<br/>
+@foreach (var report in Model.OrderByDescending(m => m.Date))
+{
+    <div class="row">
+     
+        <div class="col-sm-6 col-12" style="word-wrap: break-word">
+            <p class="badge badge-warning">@report.Date.ToString("d")</p>
+            <p class="font-weight-bold h4"><a href="@Url.Action("DoctorReport","Patient",new { id=report.Id})">@report.Doctor.GetFio(false)</a></p>
+            <p><b>Диагноз:</b> @report.Diagnosis.Name</p>
+            <p><b>Описание:</b>@Html.Raw(report.Description.Replace("\r\n", "<br/>"))</p>
+        </div>
+    </div>
+    <hr />
+}

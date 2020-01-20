@@ -1,0 +1,16 @@
+﻿@using (Html.BeginForm("ChangePhoto", "Cabinet", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data" }))
+{
+    <div class="form-horizontal">
+        <div class="form-group">
+            @Html.Label("Новое фото профиля: ",new { @class="control-label"})
+            <div>
+                <input type="file" class="form-control" id="newPhoto" name="newPhoto" accept="image/jpeg" required/>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+            <button type="submit" class="btn btn-primary">Сохранить изменения</button>
+        </div>
+    </div>
+}

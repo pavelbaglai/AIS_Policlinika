@@ -1,0 +1,43 @@
+﻿@model DigitalMedicine.Models.Users.Doctor
+@using Models = DigitalMedicine.Models.Users;
+@using DigitalMedicine.Models.KnowledgeBase;
+@using DigitalMedicine.Models;
+
+@{
+    ViewBag.Title = "Запись к врачу";
+}
+
+<h2>Записать пациента на приём к врачу</h2>
+@using (Ajax.BeginForm("MakeAnAppointmentDoctor", "Appointment", new AjaxOptions { UpdateTargetId = "result" }))
+{
+    @Html.Hidden("id")
+    @Html.Hidden("idDoctor", Model.Id)
+    @Html.Hidden("receptionTime", Model.ReceptionTime)
+    <label>Выберите пациента для записи: </label>
+    <select id="patientId" name="patientId" class="form-control">
+        @foreach (var appointment in (List<Appointment>)ViewBag.Appointments)
+        {
+            <option value="@appointment.IdPatient">@appointment.Patient.Surname @appointment.Patient.Name @appointment.Patient.Patronymic</option>
+        }
+    </select>
+    <label>Выберите дату для записи: </label>
+        <input id="selectedDate" name="selectedDate" type="date" placeholder="Выберите день" />
+        <div id="StartTimes"></div>
+}
+<div id="result"></div>
+
+<script type="text/javascript">
+
+    $("#selectedDate").flatpickr({
+        minDate: "today",
+        maxDate: new Date(@DateTime.Now.Year, 11, 31),
+        disableMobile: "true"
+    });
+
+    $("#selectedDate").change(function () {
+        var date = $('#selectedDate').val();
+        var idDoctor = $('#idDoctor').val();
+        $('#StartTimes').load('@Url.Action("GetFreeTimes", "Appointment")?idDoctor=' + idDoctor+'&date='+date)
+    })
+
+</script>

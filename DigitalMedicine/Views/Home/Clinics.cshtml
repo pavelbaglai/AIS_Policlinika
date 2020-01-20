@@ -1,0 +1,46 @@
+﻿@model IEnumerable<DigitalMedicine.Models.Institution.Clinic>
+
+@{
+    ViewBag.Title = "Больницы";
+}
+
+<h2>Больницы</h2>
+<br />
+
+@foreach (var item in Model)
+{
+    <h3 style="text-align:center"><a href="@Url.Action("Clinic", new { id=item.Id})"> @item.Name </a></h3>
+    <div class="row">
+        <div class="col-4">
+            @if (item.Photo == null)
+            {
+               <img class="img-fluid" src="~/Photos/ClinicDraw.png"/>
+            }
+            else
+            {
+                @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(item.Photo)}\" />")
+            }
+        </div>
+        <div class="col-8">
+            <br />
+            <p>
+                <b>История: </b>
+                @if (item.About == null || item.About.Length == 0)
+                {
+                    <span>Информация отсутствует</span>
+                }
+                else if (item.About.Length < 200)
+                {
+                    @Html.Raw(item.About.Replace("\r\n", "<br/>"))
+                }
+                else
+                {
+                    @Html.Raw(item.About.Replace("\r\n", "<br/>").Substring(0, 200)+" ...")
+                }
+            </p>
+            <p><b>Адрес: </b> @item.Address</p>
+        </div>
+    </div>
+    <hr />
+}
+

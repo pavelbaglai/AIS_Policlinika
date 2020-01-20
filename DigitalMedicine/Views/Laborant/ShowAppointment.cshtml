@@ -1,0 +1,59 @@
+﻿@model DigitalMedicine.Models.LaboratoryAppointment
+@{
+    /**/
+
+    ViewBag.Title = "ShowAppointment";
+}
+<h2>ShowAppointment</h2>
+<div>
+    <h4>LaboratoryAppointment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.LaboratoryAnalysis.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LaboratoryAnalysis.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Patient.Name)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Patient.Name)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Day)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Day)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.StartTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.StartTime)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.EndTime)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.EndTime)
+        </dd>
+    </dl>
+</div>
+@using (Html.BeginForm("AddReport", "Laborant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <textarea id="Description" name="Description" required></textarea>
+
+    <input type="file" id="files" name="files" accept=".rar" required />
+
+    <input type="hidden" id="PatientId" name="PatientId" value="@Model.IdPatient" />
+    <input type="hidden" id="IdLaboratoryAnalysis" name="IdLaboratoryAnalysis" value="@Model.IdLaboratoryAnalysis" />
+
+    <input type="hidden" id="LabaratoryrId" name="LabaratoryrId" value="@Model.LaboratoryAnalysis.IdLaboratory" />
+
+    <div class="form-group col-md-6">
+        <input type="submit" value="Зарегестрировать" class="btn btn-outline-primary" />
+        <a class="btn btn-outline-danger" href="@Url.Action("Index","Cabinet")">В кабинет</a>
+    </div>
+}

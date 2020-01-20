@@ -1,0 +1,53 @@
+﻿@model IEnumerable<DigitalMedicine.Models.Appointment>
+@using DigitalMedicine.Models.KnowledgeBase
+@using DigitalMedicine.Models
+
+@{
+    ViewBag.Title = "Текущие записи";
+    DataBaseContext context = new DataBaseContext();
+}
+
+<h2>Текущие записи</h2>
+<table class="table table-bordered">
+    <tr style="font-weight:bold">
+        <th>
+            Доктор
+        </th>
+        <th>
+            Жалобы
+        </th>
+        <th>
+            День приёма
+        </th>
+        <th>
+            Начало приёма
+        </th>
+        <th></th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <a href="@Url.Action("Doctor","Home",new { id=item.IdDoctor})">@item.Doctor.GetFio(false)</a>
+            </td>
+            <td>
+                <ul>
+                    @foreach (int idSymptom in Symptom.GetSymptomsInt(item.IdSymptoms))
+                    {
+                        <li>@context.Symptoms.Find(idSymptom).Name</li>
+                    }
+                </ul>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Day)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                <a class="btn btn-danger" href="@Url.Action("CancelAppointment","Appointment",new {item.Id})">Отменить запись</a>
+            </td>
+        </tr>
+    }
+
+</table>

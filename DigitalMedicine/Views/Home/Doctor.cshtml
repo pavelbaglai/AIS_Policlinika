@@ -1,0 +1,105 @@
+﻿@model DigitalMedicine.Models.Users.Doctor
+@using DigitalMedicine.Models.Users
+@using DigitalMedicine.Models
+
+@{
+    ViewBag.Title = Model.GetFio(false);
+    bool ability = false;
+    bool isFamilyDoctor = false;
+    User user = null;
+    if (Session["currentUser"] != null)
+    {
+        user = (User)Session["currentUser"];
+    }
+    Patient patient = null;
+    if (user!=null && user.Role.Name == "Пациент")
+    {
+        DataBaseContext con = new DataBaseContext();
+        patient = con.Patients.Find(user.Id);
+    }
+}
+<h2>
+    @Html.DisplayFor(model => model.Surname)
+    @Html.DisplayFor(model => model.Name)
+    @Html.DisplayFor(model => model.Patronymic)
+</h2>
+<br />
+<div class="row">
+    <div class="col-sm-4">
+        @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(Model.Photo)}\" />")
+    </div>
+
+    <div class="col-sm-8" style="font-size:20px">
+        <p class="h5">
+            @foreach (var speciality in Model.Specialities)
+            {
+                if (speciality.AbilityToPatientRecord) { ability = true; }
+                if (speciality.Name == "Семейный врач") { isFamilyDoctor = true; }
+                <span class="badge badge-primary">@speciality.Name</span>
+            }
+        </p>
+
+        <p><b>Дата Рождения:</b> @Model.GetBirthday() </p>
+        <p><b>E-mail:</b> @Html.DisplayFor(model => model.Email)</p>
+        <p style="font-size:17px; word-wrap:break-word"><b>Информация:</b> @Html.Raw(Model.Information.Replace("\r\n", "<br/>"))</p>
+    </div>
+</div>
+<center>
+    <div class="col-sm-8" style="font-size:17px; margin-top:20px">
+        <b>График работы:</b>
+        <table class="table table-bordered" style="text-align:center">
+            <thead>
+                <tr class="bg-success">
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Monday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Tuesday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Wednesday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Thursday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Friday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Saturday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Sunday)</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-warning">
+                    <td>@Html.DisplayFor(model => model.WorkTime.Monday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Tuesday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Wednesday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Thursday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Friday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Saturday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Sunday)</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bg-info">
+                    <td colspan="7">Примерное время приема пациента: @(Model.ReceptionTime.Hours * 60 + Model.ReceptionTime.Minutes) минут</td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+
+    @if (isFamilyDoctor && patient != null)
+    {
+        if (patient.IdFamilyDoctor == Model.Id)
+        {
+            @Html.ActionLink("Записаться на приём", "MakeAnAppointment", "Appointment", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-primary" })<br /><br />
+        }
+     
+    }
+    else if (user != null &&( !isFamilyDoctor || Model.Id==user.Id))
+    {
+        if (ability && patient!=null)
+        {
+            @Html.ActionLink("Записаться на приём", "MakeAnAppointment", "Appointment", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-primary" })
+        }
+        if (user != null && user.Role.Name == "Доктор")
+        {
+            @Html.ActionLink("Записать пациента на приём", "MakeAnAppointmentDoctor", "Appointment", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-primary" })
+        }
+    }
+</center>
+@if (Model.Clinic!=null)
+{
+    <a class="btn btn-outline-success" href="@Url.Action("Clinic", "Home", new { id = Model.Clinic.Id })"> &larr; К больнице</a>
+}

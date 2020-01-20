@@ -1,0 +1,98 @@
+﻿@model DigitalMedicine.Models.MedCard.DoctorReport
+@using DigitalMedicine.Models.KnowledgeBase
+@using DigitalMedicine.Models
+
+@{
+    ViewBag.Title = "Отчет доктора";
+    DataBaseContext context = new DataBaseContext();
+}
+
+<h2>Отчет доктора</h2>
+<hr />
+<div>
+    <div class="row">
+        <div class="col-4 text-center">
+            @Html.Raw($"<img class=\"img-fluid\" src=\"data:image/jpeg;base64,{Convert.ToBase64String(Model.Doctor.Photo)}\" />")
+        </div>
+        <div class="col-md-8" style="font-size:28px">
+            <a class="h2" href="@Url.Action("Doctor","Home",routeValues:new { id=$"{Model.DoctorId}"})">
+                @Html.DisplayFor(modelItem => Model.Doctor.Surname)
+                @Html.DisplayFor(modelItem => Model.Doctor.Name)
+                @Html.DisplayFor(modelItem => Model.Doctor.Patronymic)
+            </a>
+            <p class="h5">
+                @foreach (var speciality in Model.Doctor.Specialities)
+                {
+                    <span style="cursor:pointer" class="badge badge-primary" data-toggle="tooltip" data-placement="bottom" title="@speciality.Information">@speciality.Name</span>
+                }
+            </p>
+            <p class="h5">E-mail: @Html.DisplayFor(modelItem => Model.Doctor.Email)</p>
+            <p class="h5">Дата приёма: @Model.Date.ToString("d")</p>
+            <p class="h5">Диагноз: @Model.Diagnosis.Name</p>
+            @if (Model.Temperature != "")
+            {
+                <p class="h5">Измеренная температура: @Model.Temperature</p>
+            }
+            @if (Model.Pressure != "")
+            {
+                <p class="h5">Измеренное давление: @Model.Pressure</p>
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <p class="h5">Жалобы на момент записи:</p>
+            <ul>
+                @foreach (int idComplaint in Symptom.GetSymptomsInt(Model.Complaints))
+                {
+                    <li>@context.Symptoms.Find(idComplaint).Name</li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p class="h5">Жалобы на момент приема:</p>
+            <ul>
+                @foreach (int idComplaint2 in Symptom.GetSymptomsInt(Model.Complaints2))
+                {
+                    <li>@context.Symptoms.Find(idComplaint2).Name</li>
+                }
+            </ul>
+        </div>
+        <div class="col-md-4">
+            <p class="h5">Симптомы:</p>
+            <ul>
+                @foreach (int idSymptom in Symptom.GetSymptomsInt(Model.IdSymptoms))
+                {
+                    <li>@context.Symptoms.Find(idSymptom).Name</li>
+                }
+            </ul>
+        </div>
+        @if (Model.Analyses != null)
+        {
+            <div class="col-md-4">
+                <p class="h5">Рекомендуемые анализы:</p>
+                <ul>
+                    @foreach (string alanysis in Model.Analyses.Split(';'))
+                    {
+                    <li>@alanysis</li>
+                    }
+                </ul>
+            </div>
+        }
+    </div>
+
+    <p class="h5">Заключение врача:</p>
+    <p class="description">@Html.Raw(Model.Description.Replace("\r\n", "<br/>"))</p>
+    <p class="h5">Назначение врача:</p>
+    <p class="description">@Html.Raw(Model.Appointment.Replace("\r\n", "<br/>"))</p>
+    <p class="h5">Рекомендации:</p>
+    <p class="description">@Html.Raw(Model.Recommendation.Replace("\r\n", "<br/>"))</p>
+</div>
+<a class="btn btn-outline-success" href="@Url.Action("DoctorReports", "Patient")"> &larr; К отчетам докторов</a>
+
+<script type="text/javascript">
+    $(function () {
+        $("[data-toggle='tooltip']").tooltip();
+    });
+</script>

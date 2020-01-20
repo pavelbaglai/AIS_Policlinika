@@ -1,0 +1,535 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6A8C1000-CEEA-41E4-B9D7-280AA2820640}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>DigitalMedicine</RootNamespace>
+    <AssemblyName>DigitalMedicine</AssemblyName>
+    <TargetFrameworkVersion>v4.7</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <Use64BitIISExpress />
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <TypeScriptToolsVersion>2.3</TypeScriptToolsVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Antlr.3.5.0.2\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="ImageProcessor, Version=2.5.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ImageProcessor.2.5.6\lib\net45\ImageProcessor.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.4.0\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.4.1\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.4.1\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.4.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.4.1\lib\net45\Microsoft.AI.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.4.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.4.1\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.4.0\lib\net46\Microsoft.ApplicationInsights.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.TelemetryCorrelation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.TelemetryCorrelation.1.0.0\lib\net45\Microsoft.AspNet.TelemetryCorrelation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.8.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Diagnostics.DiagnosticSource, Version=4.0.2.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Diagnostics.DiagnosticSource.4.4.1\lib\net46\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebGrease, Version=1.6.5135.21930, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Code\MailSender.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\AppointmentController.cs" />
+    <Compile Include="Controllers\CabinetController.cs" />
+    <Compile Include="Controllers\ClinicAdminController.cs" />
+    <Compile Include="Controllers\DoctorController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\LaborantController.cs" />
+    <Compile Include="Controllers\LaboratoryAdminController.cs" />
+    <Compile Include="Controllers\ModeratorController.cs" />
+    <Compile Include="Controllers\PatientController.cs" />
+    <Compile Include="Filters\ExceptionLoggerAttribute.cs" />
+    <Compile Include="Filters\MyAuthAttribute.cs" />
+    <Compile Include="Filters\MyAuthorizeAttribute.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803162213466_InitialCreate.cs" />
+    <Compile Include="Migrations\201803162213466_InitialCreate.Designer.cs">
+      <DependentUpon>201803162213466_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803182115021_AddFamilyDoctorField.cs" />
+    <Compile Include="Migrations\201803182115021_AddFamilyDoctorField.Designer.cs">
+      <DependentUpon>201803182115021_AddFamilyDoctorField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803192044569_SeparateWorkTimesPerTables.cs" />
+    <Compile Include="Migrations\201803192044569_SeparateWorkTimesPerTables.Designer.cs">
+      <DependentUpon>201803192044569_SeparateWorkTimesPerTables.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803211318456_DropClinicIndex.cs" />
+    <Compile Include="Migrations\201803211318456_DropClinicIndex.Designer.cs">
+      <DependentUpon>201803211318456_DropClinicIndex.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803211503385_AddReceptionTimeForAnalysis.cs" />
+    <Compile Include="Migrations\201803211503385_AddReceptionTimeForAnalysis.Designer.cs">
+      <DependentUpon>201803211503385_AddReceptionTimeForAnalysis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803222023140_AddLAboratoryAppointments.cs" />
+    <Compile Include="Migrations\201803222023140_AddLAboratoryAppointments.Designer.cs">
+      <DependentUpon>201803222023140_AddLAboratoryAppointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803222110225_201803222023140_AddLAboratoryAppointments.cs" />
+    <Compile Include="Migrations\201803222110225_201803222023140_AddLAboratoryAppointments.Designer.cs">
+      <DependentUpon>201803222110225_201803222023140_AddLAboratoryAppointments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201803251956517_ChangeNullValue.cs" />
+    <Compile Include="Migrations\201803251956517_ChangeNullValue.Designer.cs">
+      <DependentUpon>201803251956517_ChangeNullValue.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804032144339_ChangeForeignKeyForComments.cs" />
+    <Compile Include="Migrations\201804032144339_ChangeForeignKeyForComments.Designer.cs">
+      <DependentUpon>201804032144339_ChangeForeignKeyForComments.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201804082023499_addReferenceWithAnalysis.cs" />
+    <Compile Include="Migrations\201804082023499_addReferenceWithAnalysis.Designer.cs">
+      <DependentUpon>201804082023499_addReferenceWithAnalysis.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805101841316_AddFieldsInMedCard.cs" />
+    <Compile Include="Migrations\201805101841316_AddFieldsInMedCard.Designer.cs">
+      <DependentUpon>201805101841316_AddFieldsInMedCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805101951565_AddPressureInMedCard.cs" />
+    <Compile Include="Migrations\201805101951565_AddPressureInMedCard.Designer.cs">
+      <DependentUpon>201805101951565_AddPressureInMedCard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805171918524_DeleteMaxLength.cs" />
+    <Compile Include="Migrations\201805171918524_DeleteMaxLength.Designer.cs">
+      <DependentUpon>201805171918524_DeleteMaxLength.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805301331337_last.cs" />
+    <Compile Include="Migrations\201805301331337_last.Designer.cs">
+      <DependentUpon>201805301331337_last.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\201805301338260_last2.cs" />
+    <Compile Include="Migrations\201805301338260_last2.Designer.cs">
+      <DependentUpon>201805301338260_last2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
+    <Compile Include="Models\DataChart.cs" />
+    <Compile Include="Models\KnowledgeBase\Diagnosis.cs" />
+    <Compile Include="Models\KnowledgeBase\Symptom.cs" />
+    <Compile Include="Models\KnowledgeBase\SymptomGroup.cs" />
+    <Compile Include="Models\KnowledgeBase\SymptomWeight.cs" />
+    <Compile Include="Models\LaboratoryAnalysis.cs" />
+    <Compile Include="Models\Users\Appointment.cs" />
+    <Compile Include="Models\Users\Comment.cs" />
+    <Compile Include="Models\DataBaseContext.cs" />
+    <Compile Include="Models\Users\Doctor.cs" />
+    <Compile Include="Models\ExceptionDetail.cs" />
+    <Compile Include="Models\Institution\Clinic.cs" />
+    <Compile Include="Models\Institution\Institution.cs" />
+    <Compile Include="Models\Institution\Labaratory.cs" />
+    <Compile Include="Models\Institution\Pharmacy.cs" />
+    <Compile Include="Models\MedCard\DoctorReport.cs" />
+    <Compile Include="Models\MedCard\LabaratoryReport.cs" />
+    <Compile Include="Models\News\ClinicNews.cs" />
+    <Compile Include="Models\News\News.cs" />
+    <Compile Include="Models\Users\DoctorSpeciality.cs" />
+    <Compile Include="Models\Users\LaboratoryAppointment.cs" />
+    <Compile Include="Models\Users\Patient.cs" />
+    <Compile Include="Models\Users\Role.cs" />
+    <Compile Include="Models\Users\OtherWorker.cs" />
+    <Compile Include="Models\Users\User.cs" />
+    <Compile Include="Models\WorkTime.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap-grid.css" />
+    <Content Include="Content\bootstrap-grid.min.css" />
+    <Content Include="Content\bootstrap-reboot.css" />
+    <Content Include="Content\bootstrap-reboot.min.css" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\flatpickr.min.css" />
+    <Content Include="Content\Index.css" />
+    <Content Include="Content\material_green.css" />
+    <Content Include="favicon.ico" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="LabaratoryArchive\Report1.rar" />
+    <Content Include="Photos\Boostrap_logo.svg.png" />
+    <Content Include="Photos\Clinic.jpg" />
+    <Content Include="Photos\Clinic1.jpg" />
+    <Content Include="Photos\ClinicDraw.png" />
+    <Content Include="Photos\DB.jpg" />
+    <Content Include="Photos\doctor1.png" />
+    <Content Include="Photos\doctor2.png" />
+    <Content Include="Photos\LaboratoryDefault.jpg" />
+    <Content Include="Photos\LaboratoryDraw.png" />
+    <Content Include="Photos\mainadmin.jpg" />
+    <Content Include="Photos\medsestra.png" />
+    <Content Include="Photos\patient1.jpg" />
+    <Content Include="Photos\PharmacyDraw.png" />
+    <Content Include="Photos\ph.jpg" />
+    <Content Include="Photos\queue.jpg" />
+    <Content Include="Scripts\bootstrap.bundle.js" />
+    <Content Include="Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="Scripts\Chart.js" />
+    <Content Include="Scripts\Chart.min.js" />
+    <Content Include="Scripts\esm\popper-utils.js" />
+    <Content Include="Scripts\esm\popper-utils.min.js" />
+    <Content Include="Scripts\esm\popper.js" />
+    <Content Include="Scripts\esm\popper.min.js" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <None Include="Scripts\jquery-3.2.1.intellisense.js" />
+    <Content Include="Scripts\flatpickr.js" />
+    <Content Include="Scripts\jquery-3.2.1.js" />
+    <Content Include="Scripts\jquery-3.2.1.min.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.js" />
+    <Content Include="Scripts\jquery-3.2.1.slim.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Scripts\popper-utils.js" />
+    <Content Include="Scripts\popper-utils.min.js" />
+    <Content Include="Scripts\popper.js" />
+    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.js" />
+    <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\umd\popper-utils.js" />
+    <Content Include="Scripts\umd\popper-utils.min.js" />
+    <Content Include="Scripts\umd\popper.js" />
+    <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Authorization.cshtml" />
+    <Content Include="Views\Home\Map.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\Registration.cshtml" />
+    <Content Include="Views\Cabinet\Index.cshtml" />
+    <Content Include="Views\Patient\DoctorReports.cshtml" />
+    <Content Include="Views\Cabinet\ChangeEmail.cshtml" />
+    <Content Include="Views\Cabinet\ChangePassword.cshtml" />
+    <Content Include="Views\Cabinet\ChangePhoto.cshtml" />
+    <Content Include="Views\Home\Doctor.cshtml" />
+    <Content Include="Views\Appointment\MakeAnAppointment.cshtml" />
+    <Content Include="Views\Appointment\GetFreeTimes.cshtml" />
+    <Content Include="Views\Patient\Appointments.cshtml" />
+    <Content Include="Views\Doctor\ShowAppointments.cshtml" />
+    <Content Include="Views\Doctor\ChangeRotationTime.cshtml" />
+    <Content Include="Views\Admin\AddAdmin.cshtml" />
+    <Content Include="Views\Admin\AddClinic.cshtml" />
+    <Content Include="Views\Admin\AddLabaratory.cshtml" />
+    <Content Include="Views\Admin\RemoveClinic.cshtml" />
+    <Content Include="Views\Admin\RemoveLabaratory.cshtml" />
+    <Content Include="Views\ClinicAdmin\AddDoctor.cshtml" />
+    <Content Include="Views\Doctor\ShowPatientInfo.cshtml" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Home\Clinics.cshtml" />
+    <Content Include="Views\Home\Clinic.cshtml" />
+    <Content Include="Views\Appointment\MakeAnAppointmentDoctor.cshtml" />
+    <Content Include="Views\ClinicAdmin\AddModerator.cshtml" />
+    <Content Include="Views\Moderator\AddNews.cshtml" />
+    <Content Include="Views\Home\News.cshtml" />
+    <Content Include="Views\Doctor\AddDiagnosis.cshtml" />
+    <Content Include="Views\Admin\SymptomWeights.cshtml" />
+    <Content Include="Views\Patient\Index.cshtml" />
+    <Content Include="Views\Doctor\Index.cshtml" />
+    <Content Include="Views\Admin\Index.cshtml" />
+    <Content Include="Views\ClinicAdmin\Index.cshtml" />
+    <Content Include="Views\Moderator\Index.cshtml" />
+    <Content Include="Views\Admin\DiagnosesBySymptom.cshtml" />
+    <Content Include="Views\Patient\DoctorReport.cshtml" />
+    <Content Include="Views\Patient\LabaratoryReports.cshtml" />
+    <Content Include="Views\Home\Labaratories.cshtml" />
+    <Content Include="Views\Admin\AddInstitutions.cshtml" />
+    <Content Include="Views\Doctor\GetPatientReports.cshtml" />
+    <Content Include="Views\Doctor\GetSelfReports.cshtml" />
+    <Content Include="Views\Home\Laboratory.cshtml" />
+    <Content Include="Views\LaboratoryAdmin\Index.cshtml" />
+    <Content Include="Views\LaboratoryAdmin\AddAnalysis.cshtml" />
+    <Content Include="Views\Home\Analysis.cshtml" />
+    <Content Include="Views\Appointment\MakeAnAppointmentAnalysis.cshtml" />
+    <Content Include="Views\Patient\AnalysesAppointments.cshtml" />
+    <Content Include="Views\Laborant\Index.cshtml" />
+    <Content Include="Views\Laborant\ShowAppointments.cshtml" />
+    <Content Include="Views\LaboratoryAdmin\AddLaborant.cshtml" />
+    <Content Include="Views\Laborant\ShowAppointment.cshtml" />
+    <Content Include="Views\Admin\RemovePharmacy.cshtml" />
+    <Content Include="Views\ClinicAdmin\RemoveModerator.cshtml" />
+    <Content Include="Views\ClinicAdmin\RemoveDoctor.cshtml" />
+    <Content Include="Views\Doctor\ChangeReceptionTime.cshtml" />
+    <Content Include="Views\Doctor\AddSymptom.cshtml" />
+    <Content Include="Views\Doctor\AddComplaints.cshtml" />
+    <Content Include="Views\Doctor\AddAnalysis.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
+    <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
+    <Content Include="Scripts\jquery-3.2.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\index.d.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\201803162213466_InitialCreate.resx">
+      <DependentUpon>201803162213466_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803182115021_AddFamilyDoctorField.resx">
+      <DependentUpon>201803182115021_AddFamilyDoctorField.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803192044569_SeparateWorkTimesPerTables.resx">
+      <DependentUpon>201803192044569_SeparateWorkTimesPerTables.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803211318456_DropClinicIndex.resx">
+      <DependentUpon>201803211318456_DropClinicIndex.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803211503385_AddReceptionTimeForAnalysis.resx">
+      <DependentUpon>201803211503385_AddReceptionTimeForAnalysis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803222023140_AddLAboratoryAppointments.resx">
+      <DependentUpon>201803222023140_AddLAboratoryAppointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803222110225_201803222023140_AddLAboratoryAppointments.resx">
+      <DependentUpon>201803222110225_201803222023140_AddLAboratoryAppointments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201803251956517_ChangeNullValue.resx">
+      <DependentUpon>201803251956517_ChangeNullValue.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804032144339_ChangeForeignKeyForComments.resx">
+      <DependentUpon>201804032144339_ChangeForeignKeyForComments.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201804082023499_addReferenceWithAnalysis.resx">
+      <DependentUpon>201804082023499_addReferenceWithAnalysis.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805101841316_AddFieldsInMedCard.resx">
+      <DependentUpon>201805101841316_AddFieldsInMedCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805101951565_AddPressureInMedCard.resx">
+      <DependentUpon>201805101951565_AddPressureInMedCard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805171918524_DeleteMaxLength.resx">
+      <DependentUpon>201805171918524_DeleteMaxLength.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805301331337_last.resx">
+      <DependentUpon>201805301331337_last.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\201805301338260_last2.resx">
+      <DependentUpon>201805301338260_last2.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>50620</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:50620/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

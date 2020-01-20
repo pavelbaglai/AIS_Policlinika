@@ -1,0 +1,62 @@
+﻿<div class="modal fade" id="addAnalysis" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Добавление анализа</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <select class="form-control" name="idAnalysis" id="idAnalysis">
+                    <optgroup label="Биохимические исследования">
+                        <option value="Глюкоза в крови">Глюкоза в крови</option>
+                        <option value="Глюкоза в моче">Глюкоза в моче</option>
+                        <option value="Гликированный гемоглобин">Гликированный гемоглобин</option>
+                        <option value="Альбумин в крови">Альбумин в крови</option>
+                        <option value="Гомоцистеин">Гомоцистеин</option>
+                        <option value="Альфа-Амилаза">Альфа-Амилаза</option>
+                        <option value="Фосфатаза щелочная">Фосфатаза щелочная</option>
+                        <option value="Липаза">Липаза</option>
+                        <option value="Фолиевая кислота">Фолиевая кислота</option>
+                        <option value="Кальций в моче">Кальций в моче</option>
+                        <option value="Фосфор в моче">Фосфор в моче</option>
+                    </optgroup>
+                    <optgroup label="Гематологические исследования">
+                        <option value="Общий анализ крови">Общий анализ крови</option>
+                        <option value="Лейкоцитарная формула ">Лейкоцитарная формула </option>
+                        <option value="Cкорость Оседания Эритроцитов">Cкорость Оседания Эритроцитов</option>
+                        <option value="Ретикулоциты">Ретикулоциты</option>
+                        <option value="Группа крови">Группа крови</option>
+                        <option value="Аллоиммунные антитела">Аллоиммунные антитела</option>
+                    </optgroup>
+                    <optgroup label="Исследование мочи">
+                        <option value="Кальций мочи">Кальций мочи</option>
+                        <option value="Общий анализ мочи">Общий анализ мочи</option>
+                        <option value="Кальций мочи">Исследование мочи по Нечипоренко</option>
+                        <option value="Исследование мочи по Нечипоренко">Показатель кислотности</option>
+                        <option value="Показатель кислотности">Показатель кислотности</option>
+                        <option value="Трехстаканная проба мочи">Трехстаканная проба мочи</option>
+                    </optgroup>
+                    <optgroup label="Исследование кала">
+                        <option value="Копрограмма">Копрограмма</option>
+                        <option value="Определение скрытой крови в кале">Определение скрытой крови в кале</option>
+                    </optgroup>
+                </select>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="addAnalysisBtn" class="btn btn-primary">Добавить анализ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $("#addAnalysisBtn").click(function () {
+        value = $("#idAnalysis option:selected");
+        $("#analyses").append('<input type="checkbox" name="analyses" value="' + value.attr("value") + '" checked/>' + value.html()+'<br />');
+    });
+</script>
+
+

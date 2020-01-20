@@ -1,0 +1,34 @@
+﻿@model DigitalMedicine.Models.LaboratoryAnalysis
+@using DigitalMedicine.Models.Users
+@{
+    ViewBag.Title = "Запись на анализ";
+}
+
+<h2>Запись на анализ</h2>
+
+@using (Html.BeginForm("MakeAnAppointmentAnalysis", "Appointment", new AjaxOptions { UpdateTargetId = "result" }))
+{
+
+    @Html.Hidden("IdLaboratoryAnalysis", Model.Id)
+    @Html.Hidden("receptionTime", Model.ReceptionTime)
+    @Html.Hidden("idPatient", ((User)Session["currentUser"]).Id)
+    <br />
+    <p class="h4">Укажите желаемый день:</p>
+    <input id="selectedDate" name="selectedDate" type="date" placeholder="Укажите дату" />
+    <div id="StartTimes"></div>
+}
+
+<script type="text/javascript">
+
+    $("#selectedDate").flatpickr({
+        minDate: "today",
+        maxDate: new Date(@DateTime.Now.Year, 11, 31),
+        disableMobile: "true"
+    });
+   
+    $("#selectedDate").change(function () {
+        var date = $('#selectedDate').val();
+        var IdLaboratoryAnalysis = $('#IdLaboratoryAnalysis').val();
+        $('#StartTimes').load('@Url.Action("GetFreeTimesAnalysis", "Appointment")?idAnalysis=' + IdLaboratoryAnalysis+'&date='+date)
+    })
+</script>

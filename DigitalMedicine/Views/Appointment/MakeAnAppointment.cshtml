@@ -1,0 +1,82 @@
+﻿@model DigitalMedicine.Models.Users.Doctor
+@using Models = DigitalMedicine.Models.Users;
+@using DigitalMedicine.Models.KnowledgeBase;
+@using DigitalMedicine.Models;
+
+@{
+    ViewBag.Title = "Записаться на приём к врачу";
+}
+
+<h2>Записаться на приём к врачу</h2>
+<br />
+<p class="h4">Укажите жалобы:</p>
+@using (Html.BeginForm("MakeAnAppointment", "Appointment", new AjaxOptions { UpdateTargetId = "result" }))
+{
+    <div class="row">
+        <div class="col-4">
+            <div class="list-group" id="symptomsTab" role="tablist">
+                @{
+                    DataBaseContext con = new DataBaseContext();
+                    foreach (SymptomGroup symptomGroup in con.SymptomGroups)
+                    {
+                        <a class="list-group-item list-group-item-action" id="symptomGroupList@(symptomGroup.Id)" data-toggle="list" href="#symptomGroup@(symptomGroup.Id)" role="tab" aria-controls="symptomGroup@(symptomGroup.Id)">@symptomGroup.Name</a>
+                    }
+                }
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="tab-content" id="symptomsTabContent">
+                @foreach (SymptomGroup symptomGroup in con.SymptomGroups)
+                {
+                    <div class="tab-pane fade show" id="symptomGroup@(symptomGroup.Id)" role="tabpanel" aria-labelledby="symptomGroupList@(symptomGroup.Id)">
+                        <p style="text-align:justify; text-indent:50px">@symptomGroup.Information</p>
+                        @foreach (Symptom symptom in symptomGroup.Symptoms)
+                        {
+                            <input id="symp@(symptom.Id)" type="checkbox" name="symptoms" value="@symptom.Id"/> 
+                            <label for="symp@(symptom.Id)">@symptom.Name</label><br />
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    @Html.Hidden("id")
+    @Html.Hidden("idDoctor", Model.Id)
+    @Html.Hidden("receptionTime", Model.ReceptionTime)
+    @Html.Hidden("idPatient", ((Models.User)Session["currentUser"]).Id)
+    <br />
+    <p class="h4">Укажите желаемый день:</p>
+    <input id="selectedDate" name="selectedDate" type="date" placeholder="Укажите дату" />
+    <div id="StartTimes"></div>
+ }
+<div id="result"></div>
+
+
+<script type="text/javascript">
+
+    $("#selectedDate").flatpickr({
+        minDate: "today",
+        maxDate: new Date(@DateTime.Now.Year, 11, 31),
+        disableMobile: "true"
+    });
+
+    $("#selectedDate").change(function () {
+        var date = $('#selectedDate').val();
+        var idDoctor = $('#idDoctor').val();
+        $('#StartTimes').load('@Url.Action("GetFreeTimes", "Appointment")?idDoctor=' + idDoctor+'&date='+date)
+    })
+
+    $(".symptomGroup").click(function () {
+        var obj = $("#group" + $(this).attr("id"));
+        if (obj.css("display") == "none")
+            obj.show("slow");
+        else
+            obj.hide("slow");
+    });
+
+    $(".list-group-item").click(function () {
+        $('html').animate({ scrollTop: 0 }, 400);  
+    });
+
+</script>

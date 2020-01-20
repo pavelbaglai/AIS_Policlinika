@@ -1,0 +1,112 @@
+﻿@using DigitalMedicine.Models.MedCard
+@using DigitalMedicine.Models.KnowledgeBase
+@using DigitalMedicine.Models
+
+@{
+    DataBaseContext context = new DataBaseContext();
+    ViewBag.Title = "Просмотр Мед.карты пациента";
+}
+
+<h2>Мед.карта пациента</h2>
+
+<div class="nav nav-tabs" id="reportsMenuTabs" role="tablist">
+    <a class="nav-item nav-link active" id="doctorReportsTab" data-toggle="tab" href="#doctorReports" role="tab" aria-controls="doctorReports" aria-selected="true">Отчеты докторов</a>
+    <a class="nav-item nav-link" id="labaratoryReportsTab" data-toggle="tab" href="#labaratoryReports" role="tab" aria-controls="labaratoryReports" aria-selected="false">Отчеты лабораторий</a>
+</div>
+
+<div class="tab-content" id="reportscMenuContent">
+    <div class="tab-pane fade show active" id="doctorReports" role="tabpanel" aria-labelledby="nav-home-tab">
+        <br />
+        @foreach (var report in ((List<DoctorReport>)ViewBag.DoctorReports).OrderByDescending(dr => dr.Date))
+        {
+            <div>
+                <div class="row h5">
+                    <p>@report.Date.ToString("d")</p> &nbsp;&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp;&nbsp;
+                    <p>@report.Diagnosis.Name</p> &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div>
+                        <a href="@Url.Action("Doctor","Home",routeValues:new { id=$"{report.DoctorId}"})">
+                            @Html.DisplayFor(modelItem => report.Doctor.Surname)
+                            @Html.DisplayFor(modelItem => report.Doctor.Name)
+                            @Html.DisplayFor(modelItem => report.Doctor.Patronymic)
+                        </a>
+                    </div>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button id="@report.Id" class="btn btn-outline-success">Подробнее</button>
+                </div>
+
+                <div id="other@(report.Id)" style="display:none">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <p class="h5">Жалобы на момент записи:</p>
+                            <ul>
+                                @foreach (int idComplaint in Symptom.GetSymptomsInt(report.Complaints))
+                                {
+                                    <li>@context.Symptoms.Find(idComplaint).Name</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="h5">Жалобы на момент приема:</p>
+                            <ul>
+                                @foreach (int idComplaint2 in Symptom.GetSymptomsInt(report.Complaints2))
+                                {
+                                    <li>@context.Symptoms.Find(idComplaint2).Name</li>
+                                }
+                            </ul>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="h5">Симптомы:</p>
+                            <ul>
+                                @foreach (int idSymptom in Symptom.GetSymptomsInt(report.IdSymptoms))
+                                {
+                                    <li>@context.Symptoms.Find(idSymptom).Name</li>
+                                }
+                            </ul>
+                        </div>
+                    </div>
+                    <p class="h5">Описание:</p>
+                    <p class="description">@Html.Raw(report.Description.Replace("\r\n", "<br/>"))</p>
+                    <p class="h5">Назначение врача:</p>
+                    <p class="description">@Html.Raw(report.Appointment.Replace("\r\n", "<br/>"))</p>
+                    <p class="h5">Рекомендации:</p>
+                    <p class="description">@Html.Raw(report.Recommendation.Replace("\r\n", "<br/>"))</p>
+                </div>
+            </div>
+            <hr />
+        }
+    </div>
+
+    <div class="tab-pane fade active" id="labaratoryReports" role="tabpanel" aria-labelledby="nav-home-tab">
+        <br />
+        @foreach (var report in (List<LaboratoryReport>)ViewBag.LabaratoryReports)
+        {
+            <div id="labaratoryReport@(report.Id)" class="row h5">
+                <p class="h5">@report.Date.ToString("d")</p>&nbsp;&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp;&nbsp;
+                @if (report.LaboratoryAnalysis == null)
+                {
+                    <p>Название анализа отсутствует</p>
+                }
+                else
+                {
+                    <a href="@Url.Action("Analysis","Home", new { id=report.IdLaboratoryAnalysis})">@report.LaboratoryAnalysis.Name</a>
+                }
+                &nbsp;&nbsp;&nbsp;&nbsp; -&nbsp;&nbsp;&nbsp;&nbsp;
+                @Html.Raw($"<a class='btn btn-outline-success' href=\"data:application/zip;base64,{Convert.ToBase64String(report.Files)}\" download>Скачать архив</a>")
+            </div>
+            <b>Описание: </b> @report.Description
+            <hr />
+        }
+    </div>
+</div>
+
+<script>
+    $(".btn").click(function (e) {
+        if (this.innerText == "Подробнее") {
+            $("#other" + this.id).show("quick");
+            this.innerText = "Скрыть";
+        }
+        else {
+            $("#other" + this.id).hide("quick");
+            this.innerText = "Подробнее";
+        }
+    });
+</script>

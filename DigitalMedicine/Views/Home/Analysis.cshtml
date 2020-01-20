@@ -1,0 +1,78 @@
+﻿@model DigitalMedicine.Models.LaboratoryAnalysis
+@using DigitalMedicine.Models.Users
+
+@{
+    ViewBag.Title = Model.Name;
+    User user = null;
+    if (Session["currentUser"] != null)
+    {
+        user = (User)Session["currentUser"];
+    }
+}
+
+<h2>@Model.Name</h2>
+<hr />
+<div>
+    <dl class="dl-horizontal">
+
+        <dt>
+            @Html.DisplayNameFor(model => model.About)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.About)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Price) - грн
+        </dd>
+
+    </dl>
+</div>
+<center>
+    <div class="col-sm-8" style="font-size:17px; margin-top:20px">
+        <b>График приёма:</b>
+        <table class="table table-bordered" style="text-align:center">
+            <thead>
+                <tr class="bg-success">
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Monday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Tuesday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Wednesday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Thursday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Friday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Saturday)</td>
+                    <td>@Html.DisplayNameFor(model => model.WorkTime.Sunday)</td>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="bg-warning">
+                    <td>@Html.DisplayFor(model => model.WorkTime.Monday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Tuesday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Wednesday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Thursday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Friday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Saturday)</td>
+                    <td>@Html.DisplayFor(model => model.WorkTime.Sunday)</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr class="bg-info">
+                    <td colspan="7">Примерное время сдачи анализа: @(Model.ReceptionTime.Hours * 60 + Model.ReceptionTime.Minutes) минут</td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+    @if (user != null && user.Role.Name == "Пациент")
+    {
+        @Html.ActionLink("Записаться", "MakeAnAppointmentAnalysis", "Appointment", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-primary" })
+    }
+    else if (user != null && user.Role.Name == "Доктор")
+    {
+        @Html.ActionLink("Записать пациента", "MakeAnAppointment", "Appointment", new { id = Model.Id }, htmlAttributes: new { @class = "btn btn-primary" })
+    }
+</center>
+<a class="btn btn-outline-success" href="@Url.Action("Laboratory","Home",new { id=Model.Laboratory.Id})"> &larr; К лаборатории</a>
